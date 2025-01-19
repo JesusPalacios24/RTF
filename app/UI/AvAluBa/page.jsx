@@ -3,20 +3,6 @@
 export default function AvAlB() {
     return (
       <div className="flex flex-col h-screen bg-white">
-        {/* Encabezado */}
-        <header className="flex justify-between items-center bg-red-700 text-white p-4">
-          <img
-            src="/logo1.png"
-            alt="Logo Izquierdo"
-            className="h-12"
-          />
-          
-          <img
-            src="/logo2.png"
-            alt="Logo Derecho"
-            className="h-12"
-          />
-        </header>
   
         {/* Contenido principal */}
         <div className="flex flex-1">
