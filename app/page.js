@@ -1,4 +1,4 @@
-import BA from "./UI/AvAluBa/page"
+import BA from "./UI/PRINBa/page"
 
 export default function Home() {
   return (

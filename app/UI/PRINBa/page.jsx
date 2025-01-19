@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Modal from '../../components/Modal';
 
 export default function () {
     const rows = 4;
@@ -11,6 +12,13 @@ export default function () {
     // Función para alternar la visibilidad del menú
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+    // Estado para controla la visivilidad de ventana emergente para el correo
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    //Estado para almacenar el correo seleccionado
+    const [selectedEmail, setSelectedEmail] = useState(null);
+
+    
     // Estado para almacenar la carrera seleccionada
     const [selectedCareer, setSelectedCareer] = useState('Carrera');
 
@@ -23,9 +31,36 @@ export default function () {
     // Estado para controlar la visibilidad del menú de bandeja de entrada
     const [isInboxOpen, setIsInboxOpen] = useState(false);
 
+    //Estado almacenar los ccorreos 
+    const [correos, setCorreos] = useState([]);
+
     // Función para alternar la visibilidad del menú de bandeja de entrada
     const toggleInboxMenu = () => setIsInboxOpen(!isInboxOpen);
 
+    //Funcion para obtener de correos del JASON
+    const fetchCorreos = async () => {
+
+        try {
+            const response = await fetch('/api/correos'); //llamado de edpoints
+            const data = await response.json(); // convierte la respuesta a jason
+            console.log('Datos obtenidos:', data); // Verifica qué devuelve el servidor
+            setCorreos(data);
+        } catch (error) {
+            console.error('Error al obtener correos:', error);
+        }
+    }   
+
+    // useEffect para cargar los correos al montar el componente
+    useEffect(() => {
+        fetchCorreos(); // Llama a la función para obtener los correos
+    }, []);
+
+    // Función para manejar la selección de un correo
+    const handleCorreoSelection = (correo) => {
+        console.log('Correo seleccionado:', correo);
+        setSelectedEmail(correo); // Actualiza el correo seleccionado
+        setIsModalOpen(true); // Cierra el menú después de la selección
+    };
 
     return (
         <div className="flex h-screen">
@@ -149,14 +184,31 @@ export default function () {
 
                 {/* Menú desplegable de bandeja de entrada */}
                 <div className={`absolute bg-white shadow-md rounded-md w-40 mt-11 ${isInboxOpen ? 'block' : 'hidden'}`}>
-                    <ul>
-                        <li className="border-b p-2 text-gray-800 hover:bg-gray-200 cursor-pointer">Correo 1</li>
-                        <li className="border-b p-2 text-gray-800 hover:bg-gray-200 cursor-pointer">Correo 2</li>
-                        <li className="border-b p-2 text-gray-800 hover:bg-gray-200 cursor-pointer">Correo 3</li>
-                        <li className="p-2 text-gray-800 hover:bg-gray-200 cursor-pointer">Correo 4</li>
-                    </ul>
+                <ul>
+                    {/* Mostrar cada correo en la lista */}
+                    {correos.length > 0 ? (
+                        correos.map((correo, index) => (
+                            <li
+                                key={index}
+                                className="border-b p-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
+                                onClick={() => handleCorreoSelection(correo)}
+                            >
+                                {/* Mostrar 'asunto'*/}
+                                {correo.asunto}
+                            </li>
+                        ))
+                    ) : (
+                        <li className="p-2 text-gray-800">No hay correos disponibles</li>
+                    )}
+                </ul>
                 </div>
             </div>
+             {/* Modal de correo */}
+        <Modal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            correo={selectedEmail}
+        />
         </div>
     );
 }
