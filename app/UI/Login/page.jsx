@@ -67,8 +67,7 @@ export default function Login(){
                 <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
 
                 <button type="submit" onClick={handleLogin}>Login</button>
-                <p></p>
-                <button type="submit" onClick={handleRegister}>Crear</button>
+                
             </form>
             {mensaje && <p>{mensaje}</p>}
         </div>

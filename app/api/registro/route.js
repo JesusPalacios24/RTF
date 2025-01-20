@@ -1,41 +1,44 @@
-import { readUsers, writeUsers } from '../../libs/fileUtils';
+import connectToDatabase from '../../libs/Mongoose';
 import { hashPassword } from '../../libs/hash'; // Usa la función de hashing que creamos antes.
-import { NextResponse } from 'next/server';
+import User from '../../models/User';
 
-export async function POST(req) {
-    try {
-        // Extraer el cuerpo de la solicitud
-        const body = await req.json();
-        const { username, password } = body;
+export async function POST(req,res) {
+    // Verifica que la solicitud sea de tipo POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Método no permitido' });
+  }
 
-        // Verificar que se proporcionen ambos campos
-        if (!username || !password) {
-            return NextResponse.json({ error: 'Usuario y contraseña requeridos' }, { status: 400 });
-        }
+  const { username, password } = req.body;
 
-        // Leer usuarios existentes desde el archivo
-        const users = await readUsers();
+  // Verificar si los datos están completos
+  if (!username || !password) {
+    return res.status(400).json({ error: 'El nombre de usuario y la contraseña son requeridos' });
+  }
 
-        // Verificar si el usuario ya existe
-        const userExists = users.some((user) => user.username === username);
-        if (userExists) {
-            return NextResponse.json({ error: 'Usuario ya existe' }, { status: 400 });
-        }
+  try {
+    // Conectar a la base de datos
+    await connectToDatabase();
 
-        // Hashear la contraseña
-        const hashedPassword = await hashPassword(password);
-
-        // Crear el nuevo usuario
-        const newUser = { username, password: hashedPassword };
-        users.push(newUser);
-
-        // Escribir los usuarios actualizados al archivo
-        await writeUsers(users);
-
-        // Responder con éxito
-        return NextResponse.json({ message: 'Usuario registrado con éxito' });
-    } catch (error) {
-        console.error('Error registrando usuario:', error.message); // Aquí logueamos el error
-        return NextResponse.json({ error: `Error interno del servidor: ${error.message}` }, { status: 500 });
+    // Verificar si el usuario ya existe
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ error: 'El nombre de usuario ya está en uso' });
     }
+
+    // Hashear la contraseña
+    const hashedPassword = await hashPassword(password);
+
+    // Crear un nuevo usuario
+    const newUser = new User({ username, password: hashedPassword });
+
+    // Guardar el usuario en la base de datos
+    await newUser.save();
+
+    // Responder con un mensaje de éxito
+    res.status(201).json({ message: 'Usuario registrado exitosamente' });
+
+  } catch (error) {
+    console.error('Error al registrar el usuario:', error);
+    res.status(500).json({ error: 'Error al registrar el usuario' });
+  }
 }
