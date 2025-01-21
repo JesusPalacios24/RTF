@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export default function Creacion (){
 
-    const [user,setUser] = useState('');
+    const [username,setusername] = useState('');
         const [password, setPassword] = useState('');
         const [mensaje, setMensaje] = useState('');
 
@@ -16,7 +16,7 @@ export default function Creacion (){
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username: user, password: password}),
+                body: JSON.stringify({ username: username, password: password}),
             });
 
             const data = await response.json();
@@ -37,7 +37,7 @@ export default function Creacion (){
             <h1>Creacion</h1>
             <form onSubmit={handleRegister}>
                 <p>Usuario</p>
-                <input type="text" placeholder="Username" value={user} onChange={(e)=>setUser(e.target.value)}/>
+                <input type="text" placeholder="username" value={username} onChange={(e)=>setusername(e.target.value)}/>
 
                 <p>Contraseña</p>
                 <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
