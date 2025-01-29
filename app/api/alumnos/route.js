@@ -9,18 +9,18 @@ export async function POST(req) {
         const { nombre, carrera, noControl, nomProyecto,producto,fechaActual } = await req.json();
 
         // Validar que todos los campos estén presentes y especificar cuál falta
-        let missingField = '';
+        let campoVacio = '';
 
-        if (!nombre) missingField = 'nombre';
-        else if (!carrera) missingField = 'carrera';
-        else if (!noControl) missingField = 'nControl';
-        else if (!nomProyecto) missingField = 'nombre del proyecto';
-        else if (!producto) missingField = 'producto';
-        else if (!fechaActual) missingField = 'fecha actual';
+        if (!nombre) campoVacio = 'nombre';
+        else if (!carrera) campoVacio = 'carrera';
+        else if (!noControl) campoVacio = 'nControl';
+        else if (!nomProyecto) campoVacio = 'nombre del proyecto';
+        else if (!producto) campoVacio = 'producto';
+        else if (!fechaActual) campoVacio = 'fecha actual';
 
-        if (missingField) {
+        if (campoVacio) {
             return new Response(
-                JSON.stringify({ error: `El campo '${missingField}' es obligatorio` }),
+                JSON.stringify({ error: `El campo '${campoVacio}' es obligatorio` }),
                 { status: 400, headers: { 'Content-Type': 'application/json' } }
             );
         }
