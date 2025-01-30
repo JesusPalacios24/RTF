@@ -50,7 +50,7 @@ export default function RegistroAses(){
         <h2 className="text-2xl font-bold text-center mb-4">Registro de Asesor</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block font-medium">Nombre del Asesor:</label>
+            <label className="block font-medium">Precidente:</label>
             <input
               type="text"
               value={presidente}
@@ -61,7 +61,7 @@ export default function RegistroAses(){
           </div>
   
           <div>
-            <label className="block font-medium">Título del Anteproyecto:</label>
+            <label className="block font-medium">Titulo Profesional:</label>
             <input
               type="text"
               value={tituloProf}
