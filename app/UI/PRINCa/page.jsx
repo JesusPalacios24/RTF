@@ -1,7 +1,9 @@
 'use client';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
-export default function () {
+export default function PAGJefe () {
     const rows = 4;
     const cols = 3;
 
@@ -25,6 +27,11 @@ export default function () {
 
     // Función para alternar la visibilidad del menú de bandeja de entrada
     const toggleInboxMenu = () => setIsInboxOpen(!isInboxOpen);
+
+    // Funcíon para redireccionar a registro
+    const Redirect = () =>{
+        window.location.href= '/UI/PRINAdmin/USERS/'
+      };
 
 
     return (
@@ -124,6 +131,11 @@ export default function () {
                         </tbody>
                     </table>
 
+                    <div className='mt-3 '>
+                        <button onClick={Redirect} className='border-2 rounded-lg text-gray-700 border-gray-700 p-1'>
+                            Registrar Empleado.
+                        </button>
+                    </div>
                 </div>
             </div>
 

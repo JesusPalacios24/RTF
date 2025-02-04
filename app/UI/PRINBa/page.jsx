@@ -18,7 +18,7 @@ export default function () {
     //Estado para almacenar el correo seleccionado
     const [selectedEmail, setSelectedEmail] = useState(null);
 
-    
+
     // Estado para almacenar la carrera seleccionada
     const [selectedCareer, setSelectedCareer] = useState('Carrera');
 
@@ -48,7 +48,7 @@ export default function () {
         } catch (error) {
             console.error('Error al obtener correos:', error);
         }
-    }   
+    }
 
     // useEffect para cargar los correos al montar el componente
     useEffect(() => {
@@ -61,6 +61,33 @@ export default function () {
         setSelectedEmail(correo); // Actualiza el correo seleccionado
         setIsModalOpen(true); // Cierra el menú después de la selección
     };
+
+    const [alumnos, setAlumnos] = useState([]);
+
+    // Función para obtener los alumnos desde el API
+    const [loading, setLoading] = useState(true);
+
+    const fetchAlumnos = async () => {
+        try {
+            // Llamada al endpoint de la API para obtener los alumnos
+            const response = await fetch('/api/ShowAlumnos'); // Esto apunta al endpoint /api/alumnos en el backend de Next.js
+            const data = await response.json(); // Convertimos la respuesta en formato JSON
+            console.log('Alumnos obtenidos:', data); // Log para verificar
+            setAlumnos(data); // Actualiza el estado con los alumnos
+        } catch (error) {
+            console.error('Error al obtener los alumnos:', error);
+        } finally {
+            setLoading(false); // Cambia el estado de loading cuando termine
+        }
+    };
+
+    // useEffect para ejecutar la función al cargar el componente
+    useEffect(() => {
+        fetchAlumnos();
+    }, []); // Solo se ejecuta una vez cuando el componente se monta
+
+
+
 
     return (
         <div className="flex h-screen">
@@ -149,13 +176,18 @@ export default function () {
                             </tr>
                         </thead>
                         <tbody>
-                            {Array.from({ length: rows }).map((_, rowIndex) => (
-                                <tr key={rowIndex} className="h-10">
-                                    <td className="border border-gray-700 px-4 py-2 text-center"></td>
-                                    <td className="border border-gray-700 px-4 py-2 text-center"></td>
-                                    <td className="border border-gray-700 px-4 py-2 text-center"></td>
+                            {alumnos.length > 0 ? (
+                                alumnos.map((alumno, index) => (
+                                    <tr key={index} className="h-10">
+                                        <td className="border border-gray-700 px-4 py-2 text-center">{alumno.nombre}</td>
+                                        <td className="border border-gray-700 px-4 py-2 text-center">{alumno.noControl}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="3" className="border border-gray-700 px-4 py-2 text-center">No hay alumnos disponibles</td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
 
@@ -184,31 +216,31 @@ export default function () {
 
                 {/* Menú desplegable de bandeja de entrada */}
                 <div className={`absolute bg-white shadow-md rounded-md w-40 mt-11 ${isInboxOpen ? 'block' : 'hidden'}`}>
-                <ul>
-                    {/* Mostrar cada correo en la lista */}
-                    {correos.length > 0 ? (
-                        correos.map((correo, index) => (
-                            <li
-                                key={index}
-                                className="border-b p-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
-                                onClick={() => handleCorreoSelection(correo)}
-                            >
-                                {/* Mostrar 'asunto'*/}
-                                {correo.asunto}
-                            </li>
-                        ))
-                    ) : (
-                        <li className="p-2 text-gray-800">No hay correos disponibles</li>
-                    )}
-                </ul>
+                    <ul>
+                        {/* Mostrar cada correo en la lista */}
+                        {correos.length > 0 ? (
+                            correos.map((correo, index) => (
+                                <li
+                                    key={index}
+                                    className="border-b p-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
+                                    onClick={() => handleCorreoSelection(correo)}
+                                >
+                                    {/* Mostrar 'asunto'*/}
+                                    {correo.asunto}
+                                </li>
+                            ))
+                        ) : (
+                            <li className="p-2 text-gray-800">No hay correos disponibles</li>
+                        )}
+                    </ul>
                 </div>
             </div>
-             {/* Modal de correo */}
-        <Modal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            correo={selectedEmail}
-        />
+            {/* Modal de correo */}
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                correo={selectedEmail}
+            />
         </div>
     );
 }
