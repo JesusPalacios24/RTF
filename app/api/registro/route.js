@@ -2,6 +2,8 @@ import connectToDatabase from '../../libs/Mongoose'; // Conexión a MongoDB
 import { hashPassword } from '../../libs/hash'; // Función para hashear contraseñas
 import User from '../../models/User'; // Modelo del usuario
 
+
+// Ruta para registrar un nuevo usuario
 export async function POST(req) {
   try {
     await connectToDatabase(); // Conectar a la base de datos

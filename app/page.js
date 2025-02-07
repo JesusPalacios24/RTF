@@ -1,4 +1,4 @@
-import BA from "./UI/PRINAdmin/page"
+import BA from "./UI/PRINCa/page"
 
 
 export default function Home() {

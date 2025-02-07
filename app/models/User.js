@@ -9,3 +9,5 @@ const UserSchema = new mongoose.Schema({
 const User = mongoose.models.Usuarios || mongoose.model('Usuarios', UserSchema);
 
 export default User;
+
+// En este archivo, se define el esquema para la colección de alumnos en MongoDB.
