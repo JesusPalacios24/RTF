@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { useMsal } from '@azure/msal-react';
 import axios from 'axios';
@@ -30,7 +32,7 @@ const Correos = ({ enviarDatos }) => {
 
       const seenAlumnos = new Set();
       const emails = response.data.value
-        .filter(email => email.subject.includes('titulación'))
+        .filter(email => email.subject.includes('titulación' || 'Titulación'  || 'TITULACIÓN' || 'titulacion' || 'TITULACION' || 'Trámite' || 'trámite' || 'TRÁMITE' || 'tramite' || 'TRAMITE' || 'Tramite' || 'TITULACIÓN' || 'titulacion'))
         .map(email => ({
           alumno: email.from.emailAddress.name,
           asunto: email.subject,

@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Modal from '../../components/Modal';
+import Correos from '@/app/components/correo';
 
 export default function () {
     const rows = 4;
@@ -183,7 +184,9 @@ export default function () {
                 </button>
 
                 {/* Menú desplegable de bandeja de entrada */}
+                <Correos correos={correos} handleCorreoSelection={handleCorreoSelection} />
                 <div className={`absolute bg-white shadow-md rounded-md w-40 mt-11 ${isInboxOpen ? 'block' : 'hidden'}`}>
+                    
                 <ul>
                     {/* Mostrar cada correo en la lista */}
                     {correos.length > 0 ? (

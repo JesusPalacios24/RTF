@@ -16,7 +16,7 @@ export async function GET() {
         });
 
     } catch (error) {
-        console.error("Error para obtnener correos: ",error);
+        console.error("Error para obtener correos: ",error);
         return new NextResponse('Error al leer los  correos', { status: 500,  headers: { 'Content-Type': 'application/json' },
         });
         
