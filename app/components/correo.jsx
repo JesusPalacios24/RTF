@@ -17,6 +17,12 @@ const Correos = ({ enviarDatos }) => {
       return;
     }
 
+    const keywords = [
+      "titulación", "Titulación", "TITULACIÓN", "titulacion", "Titulacion", "TITULACION",
+      "Trámite", "trámite", "TRÁMITE", "tramite", "TRAMITE", "Tramite"
+    ];
+    
+
     try {
       const tokenResponse = await instance.acquireTokenSilent({
         scopes: ['Mail.Read'],
@@ -30,20 +36,23 @@ const Correos = ({ enviarDatos }) => {
         },
       });
 
-      const seenAlumnos = new Set();
+  
+      const seenAlumnos = new Set(); // Para evitar correos repetidos
+
       const emails = response.data.value
-        .filter(email => email.subject.includes('titulación' || 'Titulación'  || 'TITULACIÓN' || 'titulacion' || 'TITULACION' || 'Trámite' || 'trámite' || 'TRÁMITE' || 'tramite' || 'TRAMITE' || 'Tramite' || 'TITULACIÓN' || 'titulacion'))
+        .filter(email => keywords.some(keyword => email.subject.includes(keyword))) // Filtrar por palabras clave
         .map(email => ({
           alumno: email.from.emailAddress.name,
           asunto: email.subject,
+          correo: email.from.emailAddress.address,
           cuerpo: htmlToText(email.body.content, { wordwrap: 130 }),
           fecha: email.receivedDateTime.split('T')[0],
         }))
         .filter(email => {
           if (seenAlumnos.has(email.alumno)) {
-            return false;
+            return false; // Si ya está en el Set, lo ignoramos
           } else {
-            seenAlumnos.add(email.alumno);
+            seenAlumnos.add(email.alumno); // Si no está, lo agregamos
             return true;
           }
         });
@@ -57,8 +66,23 @@ const Correos = ({ enviarDatos }) => {
 
   return (
     <div className='ContenedorCorreo'>
-      <button onClick={fetchMail} className="email-button">
-        ✉️
+      <button onClick={fetchMail} className="email-button border-2 rounded-lg border-gray-700 focus:outline-none">
+    
+      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        className="w-10 h-10 text-gray-800 ml-2"
+                    >
+                        <path
+                            d="M3 8l7 5 7-5M3 8v8c0 .553.447 1 1 1h12c.553 0 1-.447 1-1V8M3 8l7 5 7-5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                        />
+                    </svg>
+  
       </button>
     </div>
   );

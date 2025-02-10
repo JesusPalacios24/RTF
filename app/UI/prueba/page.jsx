@@ -4,6 +4,7 @@
 import Correos from '@/app/components/correo';
 import React from 'react';
 
+const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
 const Home = () => {
   const handleData = (emails) => {
@@ -11,10 +12,13 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <h1>Mis Correos</h1>
-      <Correos enviarDatos={handleData} />
-    </div>
+
+          <div className="flex flex-col justify-between items-center w-12 h-10 cursor-pointer border-2 border-gray-700 rounded-lg">
+          
+          {/* Mueve el componente fuera del botón */}
+          <Correos enviarDatos={handleData} />
+        </div>
+    
   );
 };
 
