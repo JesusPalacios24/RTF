@@ -5,9 +5,39 @@ import { useMsal } from '@azure/msal-react';
 import axios from 'axios';
 import { htmlToText } from 'html-to-text'; 
 
+
 const Correos = ({ enviarDatos }) => {
   const { instance, accounts } = useMsal();
   const [datos, setDatos] = useState([]);
+
+
+  const handleCorreos = async (e) => {
+    e.preventDefault();
+    
+    try {
+      fetch('api/correos', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+
+      //Responder 
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+      console.log('Correos recibidos:', data);
+
+    } catch (error) {
+      console.log("Hubo un error al obtener los correos, cual fue el error quien sabe, pero hubo un error :3:",error);
+    }
+    
+  }
+
+
+
 
   const fetchMail = async () => {
     if (accounts.length === 0) {
@@ -46,7 +76,9 @@ const Correos = ({ enviarDatos }) => {
             seenAlumnos.add(email.alumno);
             return true;
           }
-        });
+        })
+        .filterl
+        ;
 
       setDatos(emails);
       enviarDatos(emails);
@@ -57,11 +89,38 @@ const Correos = ({ enviarDatos }) => {
 
   return (
     <div className='ContenedorCorreo'>
-      <button onClick={fetchMail} className="email-button">
-        ✉️
+      <button onClick={fetchMail} className="email-button" >
+        <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        className="w-10 h-10 text-gray-800 ml-2"
+                    >
+                        <path
+                            d="M3 8l7 5 7-5M3 8v8c0 .553.447 1 1 1h12c.553 0 1-.447 1-1V8M3 8l7 5 7-5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                        />
+                    </svg>
       </button>
     </div>
   );
 };
 
 export default Correos;
+<svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        className="w-10 h-10 text-gray-800 ml-2"
+                    >
+                        <path
+                            d="M3 8l7 5 7-5M3 8v8c0 .553.447 1 1 1h12c.553 0 1-.447 1-1V8M3 8l7 5 7-5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                        />
+                    </svg>
