@@ -86,11 +86,11 @@ const Correos = ({ enviarDatos }) => {
             return true;
           }
         })
-        .filterl
-        ;
+        
 
       setDatos(emails);
       enviarDatos(emails);
+      console.log(emails);
     } catch (error) {
       console.error('Error fetching emails:', error);
     }
@@ -99,7 +99,7 @@ const Correos = ({ enviarDatos }) => {
   return (
     <div className='ContenedorCorreo'>
 
-      <button onClick={fetchMail} className="email-button" >
+      <button onClick={fetchMail} className="email-button border-black" >
         <svg
 
                         xmlns="http://www.w3.org/2000/svg"
@@ -116,22 +116,9 @@ const Correos = ({ enviarDatos }) => {
                         />
                     </svg>
       </button>
+
     </div>
   );
 };
 
 export default Correos;
-<svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        className="w-10 h-10 text-gray-800 ml-2"
-                    >
-                        <path
-                            d="M3 8l7 5 7-5M3 8v8c0 .553.447 1 1 1h12c.553 0 1-.447 1-1V8M3 8l7 5 7-5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                        />
-                    </svg>

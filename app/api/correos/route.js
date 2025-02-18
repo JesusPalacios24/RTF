@@ -26,12 +26,10 @@ export async function GET() {
     } catch (error) {
         console.error('Error al obtener los correos:', error);
     return new Response(JSON.stringify({ error: 'Error al obtener los correos' }), { status: 500 });
-        });
+        }
         
     }   
         
-    
-}
 
 //Endpoint para agregar correos
 

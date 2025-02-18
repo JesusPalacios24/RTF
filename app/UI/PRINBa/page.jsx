@@ -33,7 +33,7 @@ export default function () {
     // Estado para controlar la visibilidad del menú de bandeja de entrada
     const [isInboxOpen, setIsInboxOpen] = useState(false);
 
-    //Estado almacenar los ccorreos 
+    //Estado almacenar los correos 
     const [correos, setCorreos] = useState([]);
 
     // Función para alternar la visibilidad del menú de bandeja de entrada
