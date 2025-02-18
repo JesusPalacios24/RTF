@@ -6,6 +6,7 @@ import Correos from '@/app/components/correo';
 export default function () {
     const rows = 4;
     const cols = 3;
+    let emailsCache = [];
 
     // Estado para controlar la visibilidad del menú
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,7 +39,7 @@ export default function () {
     // Función para alternar la visibilidad del menú de bandeja de entrada
     const toggleInboxMenu = () => setIsInboxOpen(!isInboxOpen);
 
-    //Funcion para obtener de correos del JASON
+    //Funcion para obtener de correos del JSON
     const fetchCorreos = async () => {
 
         try {
@@ -87,8 +88,14 @@ export default function () {
         fetchAlumnos();
     }, []); // Solo se ejecuta una vez cuando el componente se monta
 
-
-
+    const [emails, setEmails] = useState([]);
+    const [isOpen, setIsOpen] = useState(false); // Controla si el menú está abierto
+  
+    const handleData = (emailsData) => {
+        console.log('Emails:', emailsData);
+      setEmails(emailsData);
+      setIsOpen(true); // Abre el menú cuando llegan los correos
+    };
 
     return (
         <div className="flex h-screen">
@@ -197,46 +204,39 @@ export default function () {
 
             {/* SECCION BANDEJA ENTRADA */}
 
-            <div className="w-1/4 p-4 mt-4 ml-6 flex justify-center items-start h-full ">
-                <button onClick={toggleInboxMenu} className='border-2 rounded-lg border-gray-700'>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        className="w-10 h-10 text-gray-800 ml-2"
-                    >
-                        <path
-                            d="M3 8l7 5 7-5M3 8v8c0 .553.447 1 1 1h12c.553 0 1-.447 1-1V8M3 8l7 5 7-5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                        />
-                    </svg>
-                </button>
+            <div className="relative flex w-full h-full">
+      {/* Botón que obtiene los correos */}
+      <div className="w-1/4 p-4 mt-4 ml-6 flex justify-center items-start">
+        <Correos enviarDatos={handleData} />
+      </div>
 
-                {/* Menú desplegable de bandeja de entrada */}
-                <Correos correos={correos} handleCorreoSelection={handleCorreoSelection} />
-                <div className={`absolute bg-white shadow-md rounded-md w-40 mt-11 ${isInboxOpen ? 'block' : 'hidden'}`}>
-                <ul>
-                    {/* Mostrar cada correo en la lista */}
-                    {correos.length > 0 ? (
-                        correos.map((correo, index) => (
-                            <li
-                                key={index}
-                                className="border-b p-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
-                                onClick={() => handleCorreoSelection(correo)}
-                            >
-                                {/* Mostrar 'asunto'*/}
-                                {correo.asunto}
-                            </li>
-                        ))
-                    ) : (
-                        <li className="p-2 text-gray-800">No hay correos disponibles</li>
-                    )}
-                </ul>
+                {/* Menú desplegable a la derecha */}
+                {isOpen && (
+                    <div className="absolute top-0 right-0 w-64 bg-white shadow-lg border border-gray-300 rounded-lg p-4">
+                    <h2 className="text-lg font-bold mb-2">Correos Recibidos</h2>
+                    <ul>
+                        {emails.map((email, index) => (
+                        <li
+                            key={index}
+                            className={`p-2 border-b last:border-none cursor-pointer hover:bg-blue-100 ${
+                            selectedEmail === email ? "bg-blue-200" : ""
+                            }`}
+                            onClick={() => handleSelectEmail(email)}
+                        >
+                            <p className="font-semibold">{email.alumno}</p>
+                            <p className="text-sm text-gray-600">{email.asunto}</p>
+                        </li>
+                        ))}
+                    </ul>
+                    <button
+                        onClick={() => setIsOpen(false)}
+                        className="mt-2 p-2 bg-red-500 text-white rounded w-full"
+                    >
+                        Cerrar
+                    </button>
+                    </div>
+                )}
                 </div>
-            </div>
             {/* Modal de correo */}
             <Modal
                 isOpen={isModalOpen}
