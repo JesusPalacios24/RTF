@@ -99,7 +99,7 @@ const Correos = ({ enviarDatos }) => {
   return (
     <div className='ContenedorCorreo'>
 
-      <button onClick={fetchMail} className="email-button border-black" >
+      <button onClick={fetchMail} className="email-button border-black border-collapse" >
         <svg
 
                         xmlns="http://www.w3.org/2000/svg"
