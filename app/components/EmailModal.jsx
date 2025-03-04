@@ -2,8 +2,17 @@ function NumControl(texto, n) {
     let indexL = texto.indexOf("L"); // Encuentra la posición de "L"
     
     if (indexL === -1) return ""; // Si no hay "L", devuelve cadena vacía
+
+    let indexC = texto.indexOf("C"); // Encuentra la posición de "C"
+
+    if (indexC === -1) {
+        return texto.substring(indexL + 1, indexL + 1 + n); // Extrae N caracteres después de "L"
+    }
+    else {
+        return texto.substring(indexC , indexC + 1 + n); // Extrae caracteres incluyendo la "C" de la matricula
+    }
     
-    return texto.substring(indexL + 1, indexL + 1 + n); // Extrae N caracteres después de "L"
+   
 }
 
 const Emailmodal = ({ email, onClose }) => {
