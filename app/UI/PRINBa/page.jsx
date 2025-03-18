@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import Modal from '../../components/Modal';
+import Emailmodal from '@/app/components/EmailModal';
 import Correos from '@/app/components/correo';
 
 export default function () {
@@ -10,6 +10,8 @@ export default function () {
 
     // Estado para controlar la visibilidad del menú
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    
 
     // Función para alternar la visibilidad del menú
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -96,6 +98,8 @@ export default function () {
       setEmails(emailsData);
       setIsOpen(true); // Abre el menú cuando llegan los correos
     };
+
+  
 
     return (
         <div className="flex h-screen">
@@ -221,7 +225,7 @@ export default function () {
                             className={`p-2 border-b last:border-none cursor-pointer hover:bg-blue-100 ${
                             selectedEmail === email ? "bg-blue-200" : ""
                             }`}
-                            onClick={() => handleSelectEmail(email)}
+                            onClick={() => setSelectedEmail(email)}
                         >
                             <p className="font-semibold">{email.alumno}</p>
                             <p className="text-sm text-gray-600">{email.asunto}</p>
@@ -237,12 +241,11 @@ export default function () {
                     </div>
                 )}
                 </div>
-            {/* Modal de correo */}
-            <Modal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                correo={selectedEmail}
-            />
+                {/* Modal separado */}
+           
+                <Emailmodal email={selectedEmail} onClose={() => setSelectedEmail(null)} />
         </div>
     );
-}
+    
+    
+};
