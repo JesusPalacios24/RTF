@@ -12,29 +12,31 @@ const Correos = ({ enviarDatos }) => {
 
 
   const handleCorreos = async (e) => {
-    e.preventDefault();
     
-    try {
-      fetch('api/correos', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
 
-      //Responder 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} - ${response.statusText}`);
-      }
-  
-      const data = await response.json();
-      console.log('Correos recibidos:', data);
+    if (e) e.preventDefault(); // Solo llamar preventDefault si se recibe un evento
 
-    } catch (error) {
-      console.log("Hubo un error al obtener los correos, cual fue el error quien sabe, pero hubo un error :3:",error);
+  try {
+    const response = await fetch('api/correos', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
     }
-    
+
+    const data = await response.json();
+    console.log('Correos recibidos:', data);
+    return data; // Retornar los correos obtenidos
+
+  } catch (error) {
+    console.log("Hubo un error al obtener los correos:", error);
+    return []; // En caso de error, retornar un array vacío
   }
+};
 
 
 
