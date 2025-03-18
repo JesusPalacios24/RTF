@@ -68,6 +68,7 @@ const Correos = ({ enviarDatos }) => {
 
   
       const seenAlumnos = new Set(); // Para evitar correos repetidos
+      const correosAc = await  handleCorreos(); //Obtener correos
 
       const emails = response.data.value
         .filter(email => keywords.some(keyword => email.subject.includes(keyword))) // Filtrar por palabras clave
@@ -85,7 +86,7 @@ const Correos = ({ enviarDatos }) => {
             seenAlumnos.add(email.alumno); // Si no está, lo agregamos
             return true;
           }
-        })
+        }).filter(email => !correosAc.includes(email.correo)); //Correos 
         
 
       setDatos(emails);
