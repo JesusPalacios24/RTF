@@ -241,9 +241,9 @@ export default function () {
                     </div>
                 )}
                 </div>
-                {/* Modal separado */}
+                {/* Modal para mostrar el correo  onClose={() => setSelectedEmail(null)} */}
            
-                <Emailmodal email={selectedEmail} onClose={() => setSelectedEmail(null)} />
+                <Emailmodal email={selectedEmail}  />
         </div>
     );
     

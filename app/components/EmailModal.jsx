@@ -1,3 +1,6 @@
+import { data } from "autoprefixer";
+import { useRouter } from "next/navigation";
+
 function NumControl(texto, n) {
     let indexL = texto.indexOf("L"); // Encuentra la posición de "L"
     
@@ -15,8 +18,26 @@ function NumControl(texto, n) {
    
 }
 
+
+
+
 const Emailmodal = ({ email, onClose }) => {
     if (!email) return null; // Si no hay email seleccionado, no renderiza nada
+    const router = useRouter(); 
+
+    data = {
+        Matrícula: NumControl(email.correo, 8),
+        Nombre: email.alumno,
+    };
+
+    const handleNavigate = () => {
+        const queryString = new URLSearchParams({
+            Matricula: NumControl(email.correo, 8),
+            Nombre: email.alumno
+        }).toString();
+        
+        router.push(`/UI/PRINBa/Form_2010?${queryString}`);
+    };
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -44,13 +65,12 @@ const Emailmodal = ({ email, onClose }) => {
                 </button>
                 <button
                     onClick={() => {
-                        alert("Correo aceptado");
-                        onClose();
+                        handleNavigate(); // Llama a la función correctamente
                     }}
                     className="bg-green-500 text-white px-8 py-3 rounded-lg text-lg"
-                >
+                    >
                     Aceptar
-                </button>
+                    </button>
             </div>
         </div>
     </div>

@@ -14,7 +14,7 @@ const Correos = ({ enviarDatos }) => {
   const handleCorreos = async (e) => {
     
 
-    if (e) e.preventDefault(); // Solo llamar preventDefault si se recibe un evento
+   // if (e) e.preventDefault(); // Solo llamar preventDefault si se recibe un evento
 
   try {
     const response = await fetch('api/correos', {
