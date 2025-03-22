@@ -41,12 +41,31 @@ export async function POST(req) {
     
 
     } catch (error) {
-        console.error('Error al registrar el alumno:', error);
+        console.error('Error al registrar el Asesor:', error);
         return new Response(
             JSON.stringify({ error: 'Error interno del servidor' }),
             { status: 500, headers: { 'Content-Type': 'application/json' } }
         );
         
     }
-
 }
+
+    export async function GET() {
+        try {
+            await connectToDatabase();
+            const asesores = await Asesores.find({});
+    
+            return new Response(
+                JSON.stringify(asesores),
+                { status: 200, headers: { 'Content-Type': 'application/json' } }
+            );
+        } catch (error) {
+            console.error('Error al obtener los asesores:', error);
+            return new Response(
+                JSON.stringify({ error: 'Error interno del servidor' }),
+                { status: 500, headers: { 'Content-Type': 'application/json' } }
+            );
+        }
+    }
+
+

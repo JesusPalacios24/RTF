@@ -52,7 +52,7 @@ export default function FormPage() {
         
                    {/*  Select dentro de formData */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Titulación Integral</label>
+            <label className="block text-sm font-medium text-gray-700">Tipo de Anexo</label>
             <select
               name="opcion"
               value={formData.opcion}
@@ -60,7 +60,7 @@ export default function FormPage() {
               className="border p-2 w-full rounded-lg"
               required
             >
-              <option value="">Selecciona una opción</option>
+              <option value="">Titulación Integral</option>
               <option value="tesis">Por tesis</option>
               <option value="examen">Por examen</option>
               <option value="nose">No me acuerdo jijijai</option>
