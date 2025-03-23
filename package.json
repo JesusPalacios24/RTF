@@ -16,9 +16,13 @@
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
     "btw": "^0.1.1",
+    "docxtemplater": "^3.60.2",
+    "fs": "^0.0.1-security",
     "html-to-text": "^9.0.5",
     "mongoose": "^8.9.5",
     "next": "15.1.5",
+    "path": "^0.12.7",
+    "pizzip": "^3.1.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

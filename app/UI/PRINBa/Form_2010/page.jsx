@@ -7,16 +7,20 @@ export default function FormPage() {
 
   const searchParams = useSearchParams(); // Obtener los parámetros de la URL
 
+  const [fecha, setFecha] = useState(''); // Estado para la fecha
+
   const [formData, setFormData] = useState({
     descripcion: "TITULACIÓN INTEGRAL 'INFORME TÉCNICO DE RESIDENCIA PROFESIONAL'",
     Tema: "",
     Alumno: "",
     NoControl: "",
     opcion: "Titulación Integral",
-    carrera: "",
+    Carrera: "",
     presidente: "",
     TitPresidente: "",
     Cedula: "",
+    FechaRegistro: "",
+    Observaciones: "",
   });
 
   // Cargar datos desde la URL cuando el componente se monta
@@ -44,11 +48,41 @@ export default function FormPage() {
   };
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Formulario enviado:", formData);
-
+  
+    try {
+      const response = await fetch("/api/anexo1", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Error al generar el documento");
+      }
+  
+      // Convierte la respuesta en un blob para descargarla
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+  
+      // Crea un enlace para descargar el archivo
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Anexo1.docx";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+  
+      alert("Documento generado correctamente");
+    } catch (error) {
+      console.error("Error al generar el documento:", error);
+      alert("Hubo un error al generar el documento");
+    }
   };
+  
 
   const [opcion, setOpcion] = useState("");
 
@@ -81,7 +115,10 @@ export default function FormPage() {
     setFilteredPresidentes([]);
   };
 
-  /*FIN ASESORES*/
+  useEffect(() => { 
+    const hoy = new Date().toISOString().split('T')[0]; // Obtiene YYYY-MM-DD
+    setFormData((prev) => ({ ...prev, FechaRegistro: hoy })); // Lo actualiza en formData
+}, []);
 
 
   return (
@@ -101,7 +138,7 @@ export default function FormPage() {
               className="border p-2 w-full rounded-lg"
               required
             >
-              <option value="">Titulación Integral</option>
+              <option value="Titulación Integral">Titulación Integral</option>
               <option value="tesis">Por tesis</option>
               <option value="examen">Por examen</option>
               <option value="nose">No me acuerdo jijijai</option>
@@ -168,7 +205,7 @@ export default function FormPage() {
               name="Carrera"
               value={formData.Carrera}
               onChange={handleChange}
-              placeholder="Carrera que cursa el estudiante"
+              placeholder="Carrera del estudiante"
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
@@ -207,6 +244,7 @@ export default function FormPage() {
             <input
               name="TitPresidente"
               value={formData.TitPresidente || ""}
+              placeholder="Grado de Educación del Asesor"
               readOnly
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
@@ -218,14 +256,43 @@ export default function FormPage() {
             <input
               name="Cedula"
               value={formData.Cedula || ""}
+              placeholder="Cédula Profesional del Asesor"
               readOnly
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
+          {/*Fecha de Registro*/}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Fecha de Registro</label>
+            <input
+              type="date"
+              name="FechaRegistro"
+              value={fecha}
+              onChange={(e) => setFecha(e.target.value)}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+          </div>
+
+          {/* Observaciones */}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Observaciones</label>
+            <textarea
+              name="Observaciones"
+              value={formData.Observaciones}
+              onChange={handleChange}
+              placeholder="Observaciones"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+
           <button
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+            onClick={handleSubmit}
           >
             Enviar
           </button>
