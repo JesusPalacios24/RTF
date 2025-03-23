@@ -5,52 +5,93 @@ import { useSearchParams } from "next/navigation";
 
 export default function FormPage() {
 
-    const searchParams = useSearchParams(); // Obtener los parámetros de la URL
-  
-    const [formData, setFormData] = useState({
-      descripcion: `TITULACIÓN INTEGRAL "INFORME TÉCNICO DE RESIDENCIA PROFESIONAL"`,
-      Tema: "",
-      Alumno: "",
-      NoControl: "",
-      opcion: "Titulación Integral",
-      carrera: "",
-      presidente: "",
-      TitPresidente: "",
-      Cedula: "",
-    });
-  
-    // Cargar datos desde la URL cuando el componente se monta
-    useEffect(() => {
-      const nombre = searchParams.get("Nombre") || "";
-      const matricula = searchParams.get("Matricula") || "";
-  
-      setFormData((prev) => ({
-        ...prev,
-        Alumno: nombre,
-        NoControl: matricula
-      }));
-    }, [searchParams]); // Se ejecuta cuando cambian los parámetros de la URL
+  const searchParams = useSearchParams(); // Obtener los parámetros de la URL
+
+  const [formData, setFormData] = useState({
+    descripcion: "TITULACIÓN INTEGRAL 'INFORME TÉCNICO DE RESIDENCIA PROFESIONAL'",
+    Tema: "",
+    Alumno: "",
+    NoControl: "",
+    opcion: "Titulación Integral",
+    carrera: "",
+    presidente: "",
+    TitPresidente: "",
+    Cedula: "",
+  });
+
+  // Cargar datos desde la URL cuando el componente se monta
+  useEffect(() => {
+    const nombre = searchParams.get("Nombre") || "";
+    const matricula = searchParams.get("Matricula") || "";
+
+    setFormData((prev) => ({
+      ...prev,
+      Alumno: nombre,
+      NoControl: matricula
+    }));
+  }, [searchParams]); // Se ejecuta cuando cambian los parámetros de la URL
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === "presidente") {
+      const filtered = presidente.filter((pres) =>
+        pres.presidente?.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredPresidentes(filtered);
+    }
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Formulario enviado:", formData);
-    
+
   };
 
   const [opcion, setOpcion] = useState("");
 
+
+  /*INICIO ASESORES*/
+
+  const [presidente, setPresidente] = useState([]);
+  const [filteredPresidentes, setFilteredPresidentes] = useState([]);
+
+  useEffect(() => {
+    const fetchPresidentes = async () => {
+      try {
+        const response = await fetch("/api/asesores");
+        const data = await response.json();
+        setPresidente(data);
+      } catch (error) {
+        console.error("Error al obtener los presidentes:", error);
+      }
+    };
+    fetchPresidentes();
+  }, []);
+
+  const handleSelectPresidente = (pres) => {
+    setFormData({
+      ...formData,
+      presidente: pres.presidente,
+      TitPresidente: pres.tituloProf,
+      Cedula: pres.cedulaProfesional,
+    });
+    setFilteredPresidentes([]);
+  };
+
+  /*FIN ASESORES*/
+
+
   return (
     <div className="pt-16 ">
 
-        <div className="max-w-md mx-auto p-4 bg-white shadow-lg rounded-lg">
+      <div className="max-w-md mx-auto p-4 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold mb-4">Registro de Anexo 1</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-        
-                   {/*  Select dentro de formData */}
+
+          {/*  Select dentro de formData */}
           <div>
             <label className="block text-sm font-medium text-gray-700">Tipo de Anexo</label>
             <select
@@ -120,8 +161,8 @@ export default function FormPage() {
             />
           </div>
 
-           {/*  Carrera */}
-           <div>
+          {/*  Carrera */}
+          <div>
             <label className="block text-sm font-medium text-gray-700">Carrera</label>
             <input
               name="Carrera"
@@ -133,8 +174,8 @@ export default function FormPage() {
             />
           </div>
 
-            {/*  Presidente */}
-            <div>
+          {/*  Presidente */}
+          <div>
             <label className="block text-sm font-medium text-gray-700">Presidente</label>
             <input
               name="presidente"
@@ -144,42 +185,52 @@ export default function FormPage() {
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               required
             />
+            {filteredPresidentes.length > 0 && (
+              <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-40 overflow-auto">
+                {filteredPresidentes.map((pres, index) => (
+                  <li
+                    key={pres.id || `pres-${index}`}  // Usa el id si existe, sino genera uno con el índice
+                    onClick={() => handleSelectPresidente(pres)}
+                    className="p-2 hover:bg-gray-200 cursor-pointer"
+                  >
+                    {pres.presidente}
+                  </li>
+                ))}
+              </ul>
+            )}
+
           </div>
 
-           {/*  Titulo del Presidente */}
-           <div>
+          {/*  Titulo del Presidente */}
+          <div>
             <label className="block text-sm font-medium text-gray-700">Título del Presidente</label>
             <input
               name="TitPresidente"
-              value={formData.TitPresidente}
-              onChange={handleChange}
-              placeholder="Grado de educación del presidente"
+              value={formData.TitPresidente || ""}
+              readOnly
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              required
             />
           </div>
 
-           {/*  Cedula Profesional */}
-           <div>
-            <label className="block text-sm font-medium text-gray-700">Cedula Profesional</label>
+          {/*  Cedula Profesional */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Cédula Profesional</label>
             <input
               name="Cedula"
-              value={formData.Cedula}
-              onChange={handleChange}
-              placeholder="Cédula Profesional del presidente, matricula, etc."
+              value={formData.Cedula || ""}
+              readOnly
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              required
             />
           </div>
 
-            <button
+          <button
             type="submit"
             className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
-            >
+          >
             Enviar
-            </button>
+          </button>
         </form>
-        </div>
+      </div>
     </div>
   );
 }
