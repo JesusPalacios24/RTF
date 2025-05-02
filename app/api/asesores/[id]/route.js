@@ -1,6 +1,7 @@
 import connectToDatabase from "@/app/libs/Mongoose";
 import Asesores from "@/app/models/Asesores";
 
+
 export async function DELETE(req, { params }) {
     try {
         await connectToDatabase();
