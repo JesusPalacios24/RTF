@@ -40,7 +40,7 @@ export async function POST(req) {
       nombre_asesor: formData.presidente,
       titPresidente: formData.TitPresidente,
       cedula: formData.Cedula,
-      fecha: formatFecha(formData.FechaRegistro),  // <- aca se ponga la fecha en base a la funcion que te dije
+      fecha: formatFecha(formData.FechaRegistro),  
       observaciones: formData.Observaciones,
     });
 

@@ -1,4 +1,4 @@
-import BA from "./UI/PRINCa/page"
+import BA from "./UI/Vista_admin/page"
 
 
 
