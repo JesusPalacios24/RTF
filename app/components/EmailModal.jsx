@@ -36,7 +36,7 @@ const Emailmodal = ({ email, onClose }) => {
             Nombre: email.alumno
         }).toString();
         
-        router.push(`/UI/PRINBa/Form_2010?${queryString}`);
+        router.push(`/UI/Vista_principal/Form_2010?${queryString}`);
     };
 
     return (

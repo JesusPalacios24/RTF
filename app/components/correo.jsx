@@ -106,10 +106,10 @@ const Correos = ({ enviarDatos }) => {
         <svg
 
                         xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
+                        viewBox="0 0 25 24"
                         fill="none"
                         stroke="currentColor"
-                        className="w-10 h-10 text-gray-800 ml-2"
+                        className="w-20 h-20 text-gray-800 ml-2 border-2 border-gray-800 rounded-2xl p-3 pr-2 hover:bg-gray-200 transition duration-400 ease-in-out"
                     >
                         <path
                             d="M3 8l7 5 7-5M3 8v8c0 .553.447 1 1 1h12c.553 0 1-.447 1-1V8M3 8l7 5 7-5"
