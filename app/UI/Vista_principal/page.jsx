@@ -52,23 +52,9 @@ export default function App() {
         }
     };
 
-    const fetchAlumnos = async () => {
-        try {
-            const response = await fetch('/api/ShowAlumnos');
-            const data = await response.json();
-            setAlumnos(data);
-        } catch (error) {
-            console.error('Error al obtener los alumnos:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
-    // useEffect para obtener datos
-    useEffect(() => {
-        fetchCorreos();
-        fetchAlumnos();
-    }, []);
+
+
 
     function EnviarFormulario() {
         setShowModal(true);

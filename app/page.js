@@ -1,12 +1,10 @@
-import BA from "./UI/Vista_admin/page"
-
-
+import App from "./UI/Vista_principal/page";
 
 export default function Home() {
   return (
     <div >
       <main >
-      <BA/>
+      <App ></App>
       </main>
     </div>
   );
