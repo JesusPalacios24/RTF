@@ -1,22 +1,20 @@
-import connectToDatabase from "../../libs/Mongoose";
-import Asesores from "../../models/Asesores";
+import connectToDatabase from "../../libs/Mongoose"; //Conecta a la BD
+import Asesores from "../../models/Asesores"; //Manda a llamar al modelo de la BD
 
+//Funcion para registrar a los asesores
 export async function POST(req) {
     try {
         await connectToDatabase();
         //obtener los datos del cuerpo de la solicitud
         const { presidente, tituloProf, cedulaProfesional } = await req.json();
-        
-        //Validar que todos los campos esten presentes y especificar cual falta
 
+        //Validar que todos los campos esten presentes y especificar cual falta
         let campoVacio = '';
 
         if (!presidente) campoVacio = 'presidente';
         else if (!tituloProf) campoVacio = 'tituloProf';
         else if (!cedulaProfesional) campoVacio = 'cedulaProfesional';
-        
 
-        
         if (campoVacio) {
             return new Response(
                 JSON.stringify({ error: `El campo '${campoVacio}' es obligatorio` }),
@@ -25,11 +23,12 @@ export async function POST(req) {
         }
 
         //Registrar Asesor
-        const asesor = new Asesores({ 
-            presidente, 
-            tituloProf, 
-            cedulaProfesional, });
-            
+        const asesor = new Asesores({
+            presidente,
+            tituloProf,
+            cedulaProfesional,
+        });
+
         //Guardar en la base de datos
         await asesor.save();
 
@@ -38,7 +37,7 @@ export async function POST(req) {
             JSON.stringify({ message: 'Asesor registrado exitosamente' }),
             { status: 201, headers: { 'Content-Type': 'application/json' } }
         );
-    
+
 
     } catch (error) {
         console.error('Error al registrar el Asesor:', error);
@@ -46,26 +45,27 @@ export async function POST(req) {
             JSON.stringify({ error: 'Error interno del servidor' }),
             { status: 500, headers: { 'Content-Type': 'application/json' } }
         );
-        
+
     }
 }
 
-    export async function GET() {
-        try {
-            await connectToDatabase();
-            const asesores = await Asesores.find({});
-    
-            return new Response(
-                JSON.stringify(asesores),
-                { status: 200, headers: { 'Content-Type': 'application/json' } }
-            );
-        } catch (error) {
-            console.error('Error al obtener los asesores:', error);
-            return new Response(
-                JSON.stringify({ error: 'Error interno del servidor' }),
-                { status: 500, headers: { 'Content-Type': 'application/json' } }
-            );
-        }
+//Funcion para ver la lista de asesores existentes en la BD
+export async function GET() {
+    try {
+        await connectToDatabase();
+        const asesores = await Asesores.find({});
+
+        return new Response(
+            JSON.stringify(asesores),
+            { status: 200, headers: { 'Content-Type': 'application/json' } }
+        );
+    } catch (error) {
+        console.error('Error al obtener los asesores:', error);
+        return new Response(
+            JSON.stringify({ error: 'Error interno del servidor' }),
+            { status: 500, headers: { 'Content-Type': 'application/json' } }
+        );
     }
+}
 
 

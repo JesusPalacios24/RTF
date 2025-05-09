@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import connectToDatabase from "@/app/libs/Mongoose";
-import Documentos from "@/app/models/Documentos";
-import { GridFSBucket,ObjectId } from 'mongodb';
-import multer from "multer";
+import connectToDatabase from "@/app/libs/Mongoose"; //Conecta a la BD 
+import Documentos from "@/app/models/Documentos"; //LLama al modelo de documentos en la BD
+import { GridFSBucket,ObjectId } from 'mongodb'; //Funciona para el proceso de almacenamiento de los documentos
 
+//Funcion para descargar los anexos de la BD
 export async function GET(req, { params }) {
     try {
         await connectToDatabase();

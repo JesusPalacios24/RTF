@@ -1,7 +1,7 @@
-import connectToDatabase from "@/app/libs/Mongoose";
-import Asesores from "@/app/models/Asesores";
+import connectToDatabase from "@/app/libs/Mongoose"; //Conecta a la BD
+import Asesores from "@/app/models/Asesores"; //Manda a llamar al modelo de la BD
 
-
+//Funcion para eliminar de la BD un asesor
 export async function DELETE(req, { params }) {
     try {
         await connectToDatabase();
@@ -31,6 +31,7 @@ export async function DELETE(req, { params }) {
     }
 }
 
+//Funcion para modificar a los asesores
 export async function PUT(req, { params }) {
     try {
         await connectToDatabase();

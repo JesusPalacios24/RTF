@@ -1,10 +1,11 @@
-import fs from "fs";
-import path from "path";
-import { NextResponse } from "next/server";
-import Docxtemplater from "docxtemplater";
-import PizZip from "pizzip";
 
+import fs from "fs"; //Importa Fs = Funciona para el manejo de documentos
+import path from "path"; //Importa Path = Funciona para enrutar los documentos
+import { NextResponse } from "next/server"; //Importa NextResponse = Que son respuestas de next
+import Docxtemplater from "docxtemplater"; //Importa Docxtemplater = Funciona para leer y escribir documentos docx
+import PizZip from "pizzip"; //Es una biblioteca de JavaScript utilizada para crear, leer y manipular archivos ZIP
 
+//Constante para darle formato a la fecha
 const formatFecha = (fecha) => {
     if (!fecha) return "";
   
@@ -17,6 +18,7 @@ const formatFecha = (fecha) => {
     return `${parseInt(dia)} de ${meses[parseInt(mes) - 1]} del ${año}`;
   };
 
+//Funcion POST
 export async function POST(req) {
   try {
     const formData = await req.json();

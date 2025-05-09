@@ -1,7 +1,7 @@
-import fs from "fs/promises";
-import path from "path";
-import PizZip from "pizzip";
-import Docxtemplater from "docxtemplater";
+import fs from "fs/promises"; //Importa Fs = Funciona para el manejo de documentos
+import path from "path"; //Importa Path = Funciona para enrutar los documentos
+import PizZip from "pizzip"; //Es una biblioteca de JavaScript utilizada para crear, leer y manipular archivos ZIP
+import Docxtemplater from "docxtemplater"; //Importa Docxtemplater = Funciona para leer y escribir documentos docx
 
 // Definir los campos requeridos por cada plantilla
 const plantillaCampos = {
@@ -10,6 +10,7 @@ const plantillaCampos = {
   "anexo-v": ["nombre_presidente", "maestria_presidente", "cedula_presidente", "nombre_secretario", "maestria_secretario", "cedula_secretario", "nombre_vocal", "maestria_vocal", "cedula_vocal", "nombre_vocal_suplente", "maestria_vocal_suplente", "cedula_vocal_suplente", "carrera_fecha_realizado", "hora", "producto", "tema"]
 };
 
+//Funcion para solo aceptar el metodo POST necesario
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Método no permitido" });
