@@ -103,7 +103,9 @@ export default function FormPage() {
       a.remove();
 
       // Subir a MongoDB
-      const archivoFile = new File("Anexo1.docx");
+      const archivoFile = new File([blob], "Anexo1.docx", {
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      });
 
       const formDataToUpload = new FormData();
       formDataToUpload.append("idDoc", formData.NoControl);
