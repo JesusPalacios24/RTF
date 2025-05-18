@@ -1,3 +1,8 @@
+"use client";
+
+import dynamic from 'next/dynamic';
+
+const PDFViewer = dynamic(() => import('@/app/components/PDFviewer'), { ssr: false });
 
 
 export default function AvAlB() {
@@ -26,10 +31,15 @@ export default function AvAlB() {
           </aside>
   
           {/* Área de contenido */}
-          <section className="flex-1 flex items-center justify-center border bg-gray-100 p-4">
-            <h2 className="text-2xl font-bold">Resumen</h2>
+          <section className="flex-1 border bg-gray-100 p-4">
+            <PDFViewer url="/anexo-i.pdf" />
+            <PDFViewer url="/anexo-i.pdf" />
+            <PDFViewer url="/anexo-i.pdf" />
+            <PDFViewer url="/anexo-i.pdf" />
+            <PDFViewer url="/anexo-i.pdf" />
           </section>
         </div>
+
       </div>
     );
   }
