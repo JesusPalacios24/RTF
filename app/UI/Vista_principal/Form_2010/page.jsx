@@ -112,6 +112,10 @@ export default function FormPage() {
       formDataToUpload.append("nombreAlumno", formData.Alumno);
       formDataToUpload.append("documentoAdjunto", archivoFile);
       formDataToUpload.append("anexo", "Anexo1");
+      formDataToUpload.append("Carrera", formData.Carrera);
+      formDataToUpload.append("Ultimo_cambio", formData.FechaRegistro);
+
+     
 
       const uploadResponse = await fetch("/api/documentos", {
         method: "POST",

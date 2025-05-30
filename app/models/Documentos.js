@@ -1,3 +1,4 @@
+import { createReadStream } from "fs";
 import mongoose, { Schema } from "mongoose";
 
 const DocumentosSchema = new Schema({
@@ -6,6 +7,8 @@ const DocumentosSchema = new Schema({
     documentoAdjunto: { type: mongoose.Schema.Types.ObjectId, required: true},
     anexo: { type: String, required: true },
     tipoMIME: { type: String, required: true },
+    Carrera: {type: String, required: true },
+    Ultimo_cambio: {type: Date, required: true}
 });
 
 // Crea el modelo basado en el esquema

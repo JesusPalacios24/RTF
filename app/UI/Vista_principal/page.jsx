@@ -47,7 +47,7 @@ export default function App() {
         }
     };
 
-    // ✅ NUEVO: Obtener alumnos desde MongoDB
+    // Obtener alumnos desde MongoDB
     useEffect(() => {
         const fetchAlumnos = async () => {
             try {
@@ -61,6 +61,7 @@ export default function App() {
 
         fetchAlumnos();
     }, []);
+
 
     function EnviarFormulario() {
         setShowModal(true);
@@ -110,18 +111,24 @@ export default function App() {
                 <table className="table-auto w-full border-collapse border border-gray-300">
                     <thead>
                         <tr className="bg-gray-200">
+                            <th className="border border-gray-300 px-4 py-2">Carrera</th>
                             <th className="border border-gray-300 px-4 py-2">Nombre</th>
                             <th className="border border-gray-300 px-4 py-2">No. de control</th>
                             <th className="border border-gray-300 px-4 py-2">Anexo</th>
+                            <th className="border border-gray-300 px-4 py-2">Fecha de Regisro</th>
+
                         </tr>
                     </thead>
                     <tbody>
                         {alumnos.length > 0 ? (
                             alumnos.map((alumno, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
+                                    <td className="border border-gray-300 px-4 py-2 text-center">{alumno.Carrera}</td>
                                     <td className="border border-gray-300 px-4 py-2 text-center">{alumno.nombreAlumno}</td>
                                     <td className="border border-gray-300 px-4 py-2 text-center">{alumno.idDoc}</td>
                                     <td className="border border-gray-300 px-4 py-2 text-center">{alumno.anexo}</td>
+                                    <td className="border border-gray-300 px-4 py-2 text-center">{alumno.Ultimo_cambio}</td>
+
                                 </tr>
                             ))
                         ) : (

@@ -15,9 +15,11 @@ export async function POST(req) {
     const documentoAdjunto = formData.get('documentoAdjunto');
     const anexo = formData.get('anexo');
     const tipoMime = formData.get('tipoMime');
+    const carrera = formData.get('Carrera');
+    const ultimoCambio = formData.get('Ultimo_cambio');
 
     // Validación
-    if (!id || !nombreAlumno || !documentoAdjunto || documentoAdjunto.size === 0 || !anexo) {
+    if (!id || !nombreAlumno || !documentoAdjunto || documentoAdjunto.size === 0 || !anexo || !carrera || !ultimoCambio) {
       return new Response(
         JSON.stringify({ error: 'Todos los campos son obligatorios' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
@@ -50,6 +52,8 @@ export async function POST(req) {
       documentoAdjunto: uploadStream.id, // ID del archivo en GridFS
       tipoMIME: documentoAdjunto.type,
       anexo: anexo, // <-- Guardar campo anexo
+      Carrera: carrera,
+      Ultimo_cambio: ultimoCambio,
     });
 
     await documentoNuevo.save();
@@ -71,7 +75,7 @@ export async function POST(req) {
 export async function GET() {
   try {
     await connectToDatabase();
-    const documentos = await Documentos.find({}, "nombreAlumno idDoc anexo").lean();
+    const documentos = await Documentos.find({}, "nombreAlumno idDoc anexo  Carrera Ultimo_cambio ").lean();
 
     return new Response(JSON.stringify(documentos), {
       status: 200,
@@ -79,7 +83,7 @@ export async function GET() {
     });
   } catch (error) {
     console.error("Error al obtener documentos:", error);
-    return new Response(JSON.stringify({ error: "Error al obtener documentos" }), {
+    return new Response(JSON.stringify({ error: "Error al obtener documentos " }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });
