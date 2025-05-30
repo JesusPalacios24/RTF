@@ -4,10 +4,8 @@ import { useState, useEffect } from 'react';
 import Emailmodal from '@/app/components/EmailModal';
 import Correos from '@/app/components/correo';
 import { useRouter } from 'next/navigation'
-import { set } from 'mongoose';
 
 export default function App() {
-    // Estados
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedEmail, setSelectedEmail] = useState(null);
@@ -19,10 +17,8 @@ export default function App() {
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const Router = useRouter();
+    const [showModal, setShowModal] = useState(false);
 
-    const [showModal, setShowModal] = useState(false); // Estado para el modal del correo manual
-
-    // Funciones de manejo de estado
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const toggleInboxMenu = () => setIsInboxOpen(!isInboxOpen);
 
@@ -41,7 +37,6 @@ export default function App() {
         setIsOpen(true);
     };
 
-    // Llamadas a la API
     const fetchCorreos = async () => {
         try {
             const response = await fetch('/api/correos');
@@ -52,13 +47,23 @@ export default function App() {
         }
     };
 
+    // ✅ NUEVO: Obtener alumnos desde MongoDB
+    useEffect(() => {
+        const fetchAlumnos = async () => {
+            try {
+                const res = await fetch("/api/documentos");
+                const data = await res.json();
+                setAlumnos(data);
+            } catch (error) {
+                console.error("Error al obtener alumnos:", error);
+            }
+        };
 
-
-
+        fetchAlumnos();
+    }, []);
 
     function EnviarFormulario() {
         setShowModal(true);
-  
     }
 
     function onClose() {
@@ -70,9 +75,7 @@ export default function App() {
         setShowModal(false);
     }
 
-    //boton para ir al crud
     const handleClick = () => {
-        // Redirige a otra página
         window.location.href = '/UI/RegistrarAses';
     };
 
@@ -99,8 +102,6 @@ export default function App() {
                         </button>
                     </ul>
                 )}
-
-
             </div>
 
             {/* Sección de Alumnos - Centro */}
@@ -111,18 +112,22 @@ export default function App() {
                         <tr className="bg-gray-200">
                             <th className="border border-gray-300 px-4 py-2">Nombre</th>
                             <th className="border border-gray-300 px-4 py-2">No. de control</th>
+                            <th className="border border-gray-300 px-4 py-2">Anexo</th>
                         </tr>
                     </thead>
                     <tbody>
                         {alumnos.length > 0 ? (
                             alumnos.map((alumno, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
-                                    <td className="border border-gray-300 px-4 py-2 text-center">{alumno.nombre}</td>
-                                    <td className="border border-gray-300 px-4 py-2 text-center">{alumno.noControl}</td>
+                                    <td className="border border-gray-300 px-4 py-2 text-center">{alumno.nombreAlumno}</td>
+                                    <td className="border border-gray-300 px-4 py-2 text-center">{alumno.idDoc}</td>
+                                    <td className="border border-gray-300 px-4 py-2 text-center">{alumno.anexo}</td>
                                 </tr>
                             ))
                         ) : (
-                            <tr><td colSpan="2" className="border border-gray-300 px-4 py-2 text-center">No hay alumnos disponibles</td></tr>
+                            <tr>
+                                <td colSpan="3" className="border border-gray-300 px-4 py-2 text-center">No hay alumnos disponibles</td>
+                            </tr>
                         )}
                     </tbody>
                 </table>
@@ -149,56 +154,32 @@ export default function App() {
                 )}
                 <Emailmodal email={selectedEmail} />
 
-                <button onClick={EnviarFormulario} className="email-button border-black border-collapse" >
-                                 <svg
-
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 25 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    className="w-20 h-20 bg-red-600 text-gray-800 ml-2 border-2 border-gray-800 rounded-2xl p-3 pr-2 hover:bg-red-800 transition duration-400 ease-in-out"
-                                >
-                                    <path
-                                        d="M3 8l7 5 7-5M3 8v8c0 .553.447 1 1 1h12c.553 0 1-.447 1-1V8M3 8l7 5 7-5"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                    />
-                                </svg>
+                <button onClick={EnviarFormulario} className="email-button border-black border-collapse">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 24" fill="none" stroke="currentColor" className="w-20 h-20 bg-red-600 text-gray-800 ml-2 border-2 border-gray-800 rounded-2xl p-3 pr-2 hover:bg-red-800 transition duration-400 ease-in-out">
+                        <path d="M3 8l7 5 7-5M3 8v8c0 .553.447 1 1 1h12c.553 0 1-.447 1-1V8M3 8l7 5 7-5" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                    </svg>
                 </button>
-                        {showModal && (
-                            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                                <div className="bg-white rounded-lg shadow-lg w-[500px]">
-                                {/* Encabezado azul */}
-                                <div className="bg-blue-600 text-white text-center py-6 rounded-t-lg w-full">
-                                    <h2 className="text-2xl font-bold">Advertencia</h2>
-                                </div>
 
-                                {/* Contenido del modal */}
-                                <div className="py-8 px-12 text-center">
-                                    <p className="text-lg">¿Estás seguro de completar el formulario manualmente?</p>
-                                </div>
-
-                                {/* Botones */}
-                                <div className="mt-4 flex justify-center gap-6 pb-6">
-                                    <button
-                                    onClick={onClose}
-                                    className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg text-lg transition duration-300"
-                                    >
-                                    Cerrar
-                                    </button>
-                                    <button
-                                    onClick={handleNavigate}
-                                    className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg text-lg transition duration-300"
-                                    >
-                                    Aceptar
-                                    </button>
-                                </div>
-                                </div>
+                {showModal && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                        <div className="bg-white rounded-lg shadow-lg w-[500px]">
+                            <div className="bg-blue-600 text-white text-center py-6 rounded-t-lg w-full">
+                                <h2 className="text-2xl font-bold">Advertencia</h2>
                             </div>
-                            )}
-
-
+                            <div className="py-8 px-12 text-center">
+                                <p className="text-lg">¿Estás seguro de completar el formulario manualmente?</p>
+                            </div>
+                            <div className="mt-4 flex justify-center gap-6 pb-6">
+                                <button onClick={onClose} className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg text-lg transition duration-300">
+                                    Cerrar
+                                </button>
+                                <button onClick={handleNavigate} className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg text-lg transition duration-300">
+                                    Aceptar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

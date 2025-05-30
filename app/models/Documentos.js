@@ -4,6 +4,7 @@ const DocumentosSchema = new Schema({
     idDoc: { type: String, required: true },
     nombreAlumno: { type: String, required: true },
     documentoAdjunto: { type: mongoose.Schema.Types.ObjectId, required: true},
+    anexo: { type: String, required: true },
     tipoMIME: { type: String, required: true },
 });
 

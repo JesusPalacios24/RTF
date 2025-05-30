@@ -104,13 +104,14 @@ export default function FormPage() {
 
       // Subir a MongoDB
       const archivoFile = new File([blob], "Anexo1.docx", {
-        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       });
 
       const formDataToUpload = new FormData();
       formDataToUpload.append("idDoc", formData.NoControl);
       formDataToUpload.append("nombreAlumno", formData.Alumno);
       formDataToUpload.append("documentoAdjunto", archivoFile);
+      formDataToUpload.append("anexo", "Anexo1");
 
       const uploadResponse = await fetch("/api/documentos", {
         method: "POST",
@@ -124,6 +125,9 @@ export default function FormPage() {
       } else {
         alert("Documento generado y guardado correctamente.");
       }
+
+      // Redirigir a la página principal después del envío
+      window.location.href = "/";
     } catch (error) {
       console.error("Error al generar o guardar el documento:", error);
       alert("Hubo un error al generar o guardar el documento");
@@ -220,7 +224,7 @@ export default function FormPage() {
           </div>
 
           {/* Presidente */}
-          <div>
+          <div className="relative">
             <label className="block text-sm font-medium text-gray-700">Presidente</label>
             <input
               name="presidente"
@@ -228,17 +232,19 @@ export default function FormPage() {
               onChange={handleChange}
               placeholder="Asesor del Anteproyecto"
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              autoComplete="off"
               required
             />
             {filteredPresidentes.length > 0 && (
-              <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-40 overflow-auto">
+              <ul className="absolute z-20 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-48 overflow-auto">
                 {filteredPresidentes.map((pres, index) => (
                   <li
                     key={pres.id || `pres-${index}`}
                     onClick={() => handleSelectPresidente(pres)}
-                    className="p-2 hover:bg-gray-200 cursor-pointer"
+                    className="flex flex-col p-2 hover:bg-blue-100 cursor-pointer"
                   >
-                    {pres.presidente}
+                    <span className="font-semibold text-gray-900">{pres.presidente}</span>
+                    <span className="text-xs text-gray-600">{pres.tituloProf} - Cédula: {pres.cedulaProfesional}</span>
                   </li>
                 ))}
               </ul>
@@ -253,7 +259,7 @@ export default function FormPage() {
               value={formData.TitPresidente || ""}
               readOnly
               placeholder="Grado de Educación del Asesor"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-50"
             />
           </div>
 
@@ -265,7 +271,7 @@ export default function FormPage() {
               value={formData.Cedula || ""}
               readOnly
               placeholder="Cédula Profesional del Asesor"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md bg-gray-50"
             />
           </div>
 
@@ -296,7 +302,7 @@ export default function FormPage() {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+            className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition"
           >
             Enviar
           </button>
@@ -305,4 +311,3 @@ export default function FormPage() {
     </div>
   );
 }
-
