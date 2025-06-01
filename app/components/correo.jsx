@@ -12,10 +12,6 @@ const Correos = ({ enviarDatos }) => {
 
 
   const handleCorreos = async (e) => {
-    
-
-   // if (e) e.preventDefault(); // Solo llamar preventDefault si se recibe un evento
-
   try {
     const response = await fetch('api/correos', {
       method: 'GET',
@@ -53,6 +49,10 @@ const Correos = ({ enviarDatos }) => {
       "titulación", "Titulación", "TITULACIÓN", "titulacion", "Titulacion", "TITULACION",
       "Trámite", "trámite", "TRÁMITE", "tramite", "TRAMITE", "Tramite"
     ];
+
+    const response = await fetch('/api/documentos');
+    const documentos = await response.json();
+    const nombresValidos = documentos.map(doc => doc.nombreAlumno.toLowerCase());
     
 
     try {
@@ -72,6 +72,8 @@ const Correos = ({ enviarDatos }) => {
       const seenAlumnos = new Set(); // Para evitar correos repetidos
       const correosAc = await  handleCorreos(); //Obtener correos
 
+      
+
       const emails = response.data.value
         .filter(email => keywords.some(keyword => email.subject.includes(keyword))) // Filtrar por palabras clave
         .map(email => ({
@@ -88,7 +90,11 @@ const Correos = ({ enviarDatos }) => {
             seenAlumnos.add(email.alumno); // Si no está, lo agregamos
             return true;
           }
-        }).filter(email => !correosAc.includes(email.correo)); //Correos 
+        }).filter(email => 
+          !correosAc.includes(email.correo) 
+          &&
+          !nombresValidos.includes(email.alumno.toLowerCase()) // Coincidencia por nombre
+        );//Correos 
         
 
       setDatos(emails);
