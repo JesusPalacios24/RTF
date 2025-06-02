@@ -5,6 +5,7 @@ import Emailmodal from '@/app/components/EmailModal';
 import Correos from '@/app/components/correo';
 import { useRouter } from 'next/navigation'
 
+
 export default function App() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,7 +17,7 @@ export default function App() {
     const [emails, setEmails] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(true);
-    const Router = useRouter();
+    const router = useRouter();
     const [showModal, setShowModal] = useState(false);
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -122,7 +123,9 @@ export default function App() {
                     <tbody>
                         {alumnos.length > 0 ? (
                             alumnos.map((alumno, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
+                                <tr key={index} className="hover:bg-cyan-600    cursor-pointer"
+                                    onClick={() => router.push(`/UI/Vista_anexos?noControl=${alumno.idDoc}`)}
+                                >
                                     <td className="border border-gray-300 px-4 py-2 text-center">{alumno.Carrera}</td>
                                     <td className="border border-gray-300 px-4 py-2 text-center">{alumno.nombreAlumno}</td>
                                     <td className="border border-gray-300 px-4 py-2 text-center">{alumno.idDoc}</td>

@@ -1,11 +1,25 @@
 "use client";
 
+import WordViewer from '@/app/components/WordViewer';
 import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
+
 
 const PDFViewer = dynamic(() => import('@/app/components/PDFviewer'), { ssr: false });
 
+ 
+
 
 export default function AvAlB() {
+
+   const searchParams = useSearchParams();
+   const noControl = searchParams.get('noControl');
+
+   console.log("noControl:", noControl);
+ 
+  
+
+
     return (
       <div className="flex flex-col h-screen bg-white">
   
@@ -32,11 +46,9 @@ export default function AvAlB() {
   
           {/* Área de contenido */}
           <section className="flex-1 border bg-gray-100 p-4">
-            <PDFViewer url="/anexo-i.pdf" />
-            <PDFViewer url="/anexo-i.pdf" />
-            <PDFViewer url="/anexo-i.pdf" />
-            <PDFViewer url="/anexo-i.pdf" />
-            <PDFViewer url="/anexo-i.pdf" />
+
+            <WordViewer docId={noControl}></WordViewer>
+      
           </section>
         </div>
 
