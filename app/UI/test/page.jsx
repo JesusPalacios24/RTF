@@ -57,7 +57,9 @@ export default function Test() {
             return;
         }
         try {
-            const response = await fetch(`/api/documentos/${idDescarga}`);
+            const response = await fetch(`/api/documentos/${idDescarga}/Anexo2`);
+            console.log('URL para descarga:', `/api/documentos/${idDescarga}/Anexo2`);
+
 
             if (!response.ok) {
                 throw new Error("No se pudo descargar el archivo");

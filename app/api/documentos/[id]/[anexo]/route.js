@@ -6,9 +6,9 @@ import { GridFSBucket, ObjectId } from 'mongodb';
 export async function GET(req, { params }) {
   try {
     await connectToDatabase();
-    const { id } = params;
+    const { id,anexo } = params;
 
-    const documento = await Documentos.findOne({ idDoc: id });
+    const documento = await Documentos.findOne({ idDoc: id, anexo: anexo });
     if (!documento) {
       return new Response(
         JSON.stringify({ error: 'Documento no encontrado' }),
